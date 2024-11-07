@@ -1,2 +1,18 @@
-# terraform-exoscale-sks-cluster
-Terraform module for provision a SKS Kubernetes cluster on Exoscale
+# terraform-module-exoscale-sks-cluster
+
+A Terraform module to deploy a Kubernetes cluster on Exoscale using the Exoscale Kubernetes Service (SKS).
+
+## TODO
+
+- [x] Add `.gitignore` and `README.md`
+- [ ] Create basic module
+  - [x] Create SKS cluster
+  - [x] Create SKS node pool
+  - [x] Create security group
+  - [ ] Create security rules
+- [ ] Find a way to secure K8s API behind our firewall
+- [ ] Write documentation
+- [ ] Add pipeline to add documentation to this README.md
+- [ ] Add pipeline to publish new release using the `semantic-release` tool
+- [ ] Investigate if the use of Private Networks is useful
+- [ ] Test if it possible to create multiple load balancers, one for accessing internal services and another for public services
