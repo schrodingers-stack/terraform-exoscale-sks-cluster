@@ -48,9 +48,9 @@ resource "exoscale_sks_nodepool" "this" {
   description = "SKS nodepool attached to the ${var.name} cluster (UUID: ${resource.exoscale_sks_cluster.this.id})."
   labels = merge(
     {
-      "lentidas-stack.io"          = "true"
-      "lentidas-stack.io/cluster"  = var.name
-      "lentidas-stack.io/nodepool" = each.key
+      "k8s-stack.cloud"          = "true"
+      "k8s-stack.cloud/cluster"  = var.name
+      "k8s-stack.cloud/nodepool" = each.key
     },
     each.value.labels
   )

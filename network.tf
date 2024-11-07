@@ -4,9 +4,9 @@ resource "exoscale_nlb" "this" {
 
   description = "TODO" # TODO
   labels = {
-    "lentidas-stack.io" = "true"
-    "sks-cluster-name"  = var.name
-    "sks-cluster-id"    = resource.exoscale_sks_cluster.this.id
+    "k8s-stack.cloud"  = "true"
+    "sks-cluster-name" = var.name
+    "sks-cluster-id"   = resource.exoscale_sks_cluster.this.id
   }
 }
 
