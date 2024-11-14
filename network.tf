@@ -4,7 +4,7 @@ resource "exoscale_nlb" "this" {
 
   description = "TODO" # TODO
   labels = {
-    "k8s-stack.cloud"  = "true"
+    "schtack.cloud"    = "true"
     "sks-cluster-name" = var.name
     "sks-cluster-id"   = resource.exoscale_sks_cluster.this.id
   }
