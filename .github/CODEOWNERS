@@ -1,0 +1,10 @@
+# CODEOWNERS file to specify individuals or teams that are responsible for code in a repository.
+# Read more: <https://help.github.com/articles/about-codeowners/>
+#
+# Order is important: the last matching pattern has the highest precedence.
+
+# These are the default owners/reviewers for all the repository.
+* @schrodingers-stack/owner @schrodingers-stack/admin @schrodingers-stack/maintain
+
+# Protect this CODEOWNERS file specifically and force reviews of this file only by the organization's owners.
+.github/CODEOWNERS @schrodingers-stack/owner
