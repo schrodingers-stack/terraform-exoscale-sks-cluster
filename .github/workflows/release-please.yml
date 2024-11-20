@@ -1,0 +1,15 @@
+---
+name: "release-please"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-please:
+    uses: schrodingers-stack/github-actions-workflows/.github/workflows/release-please.yaml@main
+    secrets:
+      SCHTACK_RELEASER_APP_ID: ${{ secrets.SCHTACK_RELEASER_APP_ID }}
+      SCHTACK_RELEASER_PRIVATE_KEY: ${{ secrets.SCHTACK_RELEASER_PRIVATE_KEY }}
