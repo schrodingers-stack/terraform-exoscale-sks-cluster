@@ -12,7 +12,7 @@ resource "exoscale_nlb" "this" {
 
 resource "exoscale_security_group" "this" {
   name        = format("%s-sg", var.name)
-  description = "Security group for the to the ${var.name} cluster (UUID: ${resource.exoscale_sks_cluster.this.id})."
+  description = "Default security group for `${var.name}` SKS cluster (UUID: ${resource.exoscale_sks_cluster.this.id})."
 }
 
 resource "exoscale_security_group_rule" "sks_logs" {
@@ -105,24 +105,4 @@ resource "exoscale_security_group_rule" "all" {
 #   cidr              = "0.0.0.0/0"
 #   start_port        = 30000
 #   end_port          = 32767
-# }
-
-# resource "exoscale_security_group_rule" "http" {
-#   security_group_id = resource.exoscale_security_group.this.id
-#   description       = "Allow incoming HTTP traffic from the outside world."
-#   type              = "INGRESS"
-#   protocol          = "TCP"
-#   cidr              = "0.0.0.0/0"
-#   start_port        = 80
-#   end_port          = 80
-# }
-
-# resource "exoscale_security_group_rule" "https" {
-#   security_group_id = resource.exoscale_security_group.this.id
-#   description       = "Allow incoming HTTP traffic from the outside world."
-#   type              = "INGRESS"
-#   protocol          = "TCP"
-#   cidr              = "0.0.0.0/0"
-#   start_port        = 443
-#   end_port          = 443
 # }
