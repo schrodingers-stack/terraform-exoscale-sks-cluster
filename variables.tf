@@ -43,6 +43,18 @@ variable "description" {
   description = "A free-form string description to apply to the SKS cluster."
 }
 
+variable "enable_private_lb" {
+  type        = bool
+  default     = false
+  description = "Enable the creation of a private load balancer for the SKS cluster. This will expose the services of the cluster to the IPs defined in the `var.private_lb_ip_whitelist`."
+}
+
+variable "enable_public_lb" {
+  type        = bool
+  default     = true
+  description = "Enable the creation of a public load balancer for the SKS cluster. This will expose the services of the cluster to the internet."
+}
+
 variable "kubeconfig_file_create" {
   description = "Create a Kubeconfig file in the directory where `terraform apply` is run. The file will be named `<cluster_name>-config.yaml`."
   type        = bool
@@ -104,6 +116,49 @@ variable "nodepools" {
 
     Needs to be a map of maps, where the key is the name of the node pool and the value is a map containing at least the keys `instance_type` and `size`.
     The other keys are optional: `description`, `instance_prefix`, `disk_size`, `labels`, `taints`, `private_network_ids` and `security_group_ids`. Check the official documentation https://registry.terraform.io/providers/exoscale/exoscale/latest/docs/resources/sks_nodepool[here] for more information.
+  EOT
+}
+variable "private_lb_nodepool" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    The name of the node pool to use as the backend for the public load balancer.
+    
+    This is the node pool where your public ingress controller should reside. A new security group with specific rules will be created for this node pool.
+  EOT
+
+  validation {
+    condition     = var.enable_private_lb ? var.private_lb_nodepool != null : true
+    error_message = "The private load balancer is enabled, but `var.private_lb_nodepool` is not set. Please provide the name of the node pool to use as the backend for the private load balancer."
+  }
+
+  validation {
+    condition     = var.private_lb_nodepool != null ? contains(keys(var.nodepools), var.private_lb_nodepool) : true
+    error_message = "The name of node pool to be attached to the security group rules of the private load balancer must be present in `var.nodepools`."
+  }
+}
+
+variable "private_lb_ip_whitelist" {
+  type        = list(string)
+  nullable    = false
+  default     = []
+  description = "List of IP addresses or CIDR blocks that are allowed to access the private load balancer. If empty, the private load balancer will not be accessible from the internet."
+
+  validation {
+    condition     = var.enable_private_lb ? length(var.private_lb_ip_whitelist) > 0 : true
+    error_message = "The private load balancer is enabled, but the IP whitelist is empty. Please provide at least one IP address or CIDR block."
+  }
+}
+
+variable "public_lb_nodepool" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    The name of the node pool to use as the backend for the public load balancer.
+    
+    This is the node pool where your public ingress controller should reside. A new security group with specific rules will be created for this node pool.
+    
+    If not set, the first node pool in `var.nodepools` will be used.
   EOT
 }
 

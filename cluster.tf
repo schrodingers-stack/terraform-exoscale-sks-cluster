@@ -43,9 +43,18 @@ resource "exoscale_sks_nodepool" "this" {
   instance_type       = each.value.instance_type
   disk_size           = each.value.disk_size
   private_network_ids = each.value.private_network_ids
-  security_group_ids  = concat([resource.exoscale_security_group.this.id], each.value.security_group_ids)
+  security_group_ids = concat(
+    # Add the default security group to the node pool.
+    [resource.exoscale_security_group.default.id],
+    # Add the public security group to the node pool if it is the public node pool.
+    [for nodepool in [each.key] : resource.exoscale_security_group.public_lb[0].id if nodepool == local.public_lb_instance_pool_name],
+    # Add private security group to the node pool if it is the private node pool.
+    [for nodepool in [each.key] : resource.exoscale_security_group.private_lb[0].id if nodepool == local.private_lb_instance_pool_name],
+    # Add the security groups defined in the node pool variable.
+    each.value.security_group_ids
+  )
 
-  description = "SKS nodepool attached to the ${var.name} cluster (UUID: ${resource.exoscale_sks_cluster.this.id})."
+  description = "SKS node pool attached to the ${var.name} cluster."
   labels = merge(
     {
       "schtack.cloud"          = "true"
