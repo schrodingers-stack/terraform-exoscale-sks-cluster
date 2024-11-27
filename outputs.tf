@@ -1,3 +1,5 @@
+# NOTE: the outputs in this file are organized in alphabetical order.
+
 output "kubernetes_host" {
   description = "Endpoint for your Kubernetes API server."
   value       = resource.exoscale_sks_cluster.this.endpoint
@@ -26,3 +28,5 @@ output "raw_kubeconfig" {
   value       = resource.exoscale_sks_kubeconfig.this.kubeconfig
   sensitive   = true
 }
+
+# TODO Add outputs with the IP addresses of the load balancers, their IDs and their respective node pools.

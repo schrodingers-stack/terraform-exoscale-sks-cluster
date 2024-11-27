@@ -4,7 +4,7 @@ resource "exoscale_nlb" "public" {
   zone = var.zone
   name = format("%s-nlb-public", var.name)
 
-  description = "Public Network Load Balancer for `${var.name}` SKS cluster."
+  description = "Public Network Load Balancer for the `${var.name}` SKS cluster."
   labels = {
     "schtack.cloud"             = "true"
     "schtack.cloud/cluster"     = var.name
@@ -50,7 +50,7 @@ resource "exoscale_nlb" "private_lb" {
   zone = var.zone
   name = format("%s-lb-private", var.name)
 
-  description = "Private Load Balancer for `${var.name}` SKS cluster."
+  description = "Private Load Balancer for the s`${var.name}` SKS cluster."
   labels = {
     "schtack.cloud"             = "true"
     "schtack.cloud/cluster"     = var.name
