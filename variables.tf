@@ -46,13 +46,21 @@ variable "description" {
 variable "enable_private_lb" {
   type        = bool
   default     = false
-  description = "Enable the creation of a private load balancer for the SKS cluster. This will expose the services of the cluster to the IPs defined in the `var.private_lb_ip_whitelist`."
+  description = <<-EOT
+    Enable the creation of a private load balancer for the SKS cluster. This will expose the services of the cluster to the IPs defined in the `var.private_lb_ip_whitelist`.
+
+    WARNING: Cannot be disabled after the first deployment without some manual steps. To disable it, you need to first detach the node pool from the security group rules of the private load balancer and then you can `terraform apply`.
+  EOT
 }
 
 variable "enable_public_lb" {
   type        = bool
   default     = true
-  description = "Enable the creation of a public load balancer for the SKS cluster. This will expose the services of the cluster to the internet."
+  description = <<-EOT
+    Enable the creation of a public load balancer for the SKS cluster. This will expose the services of the cluster to the internet.
+
+    WARNING: Cannot be disabled after the first deployment without some manual steps. To disable it, you need to first detach the node pool from the security group rules of the public load balancer and then you can `terraform apply`.
+  EOT
 }
 
 variable "kubeconfig_file_create" {
