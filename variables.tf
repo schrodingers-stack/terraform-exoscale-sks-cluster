@@ -160,6 +160,22 @@ variable "public_lb_nodepool" {
     
     If not set, the first node pool in `var.nodepools` will be used.
   EOT
+
+  validation {
+    condition     = var.enable_public_lb && var.public_lb_nodepool != null ? contains(keys(var.nodepools), var.public_lb_nodepool) : true
+    error_message = "The name of node pool to be attached to the security group rules of the public load balancer must be present in `var.nodepools`."
+  }
+
+  validation {
+    condition = (var.enable_public_lb && var.enable_private_lb && var.private_lb_nodepool != null ?
+      (var.public_lb_nodepool == null ?
+        var.private_lb_nodepool != keys(var.nodepools)[0] :
+        var.public_lb_nodepool != var.private_lb_nodepool
+      ) :
+      true
+    )
+    error_message = "The public and private load balancers cannot use the same node pool as the backend."
+  }
 }
 
 variable "service_level" {
