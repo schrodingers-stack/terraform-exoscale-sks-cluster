@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.1.1](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/compare/v0.1.0...v0.1.1) (2024-11-27)
+
+
+### Features
+
+* add default SG rules to allow health checks on private LB ([b33920f](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/b33920f7ef0df4880c6205d57c4aa7ad55d6fc00))
+* add outputs with the LB info to configure the ingress controller ([05e13f1](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/05e13f1591ee096c52751551e9540df95ecd97fb))
+* implement a way to provide a private and public LB ([11e6ef5](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/11e6ef5076885d7df411e6fcd0a1627d80ec7eb4))
+* validate that both LBs do not use the same backend node pool ([12ca39c](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/12ca39c164db81305a23118df242965a92e0b433))
+
+
+### Bug Fixes
+
+* fix not found error when LBs are not enabled ([9649c12](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/9649c12161d5a5d95e7ab195e7e37fa3d21b75b5))
+* remove '/' from tags (they are overwritten by Exoscale) ([56dbe11](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/56dbe1170f30e9b970ef4c4c6ea6dfd86e3b19d2))
+
+
+### Documentation
+
+* add small note on comment in locals.tf ([29a168b](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/29a168be6f10464790e23e5a1239686272a9d5de))
+* warn users that disabling LB requires manual steps ([dc01e27](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/dc01e2712e3f9ed31f5db301802d501297d4538f))
+
+
+### Miscellaneous Chores
+
+* merge pull request [#5](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/issues/5) from schrodingers-stack/feat/create-load-balancers ([cac5db0](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/cac5db0191db6092f6b77ae4dd45a0766ccc4450))
+* remove commented and unnecessary rules ([83871cc](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/83871ccbe96a3cef267dec79bc876af1b1d5df8b))
+
+
+### Code Refactoring
+
+* rename files to more understandable file structure ([ac887c1](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/ac887c1f5cc6fe2b80daa7b73ad92a501de2ab88))
+* reorganize attributes in SG rules in the same order ([6e9ef6c](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/6e9ef6c3d32b7dc6e2195f133190a51543fddd0b))
+
 ## 0.1.0 (2024-11-21)
 
 
