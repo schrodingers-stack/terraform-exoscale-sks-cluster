@@ -6,10 +6,10 @@ resource "exoscale_nlb" "public" {
 
   description = "Public Network Load Balancer for the `${var.name}` SKS cluster."
   labels = {
-    "schtack.cloud"             = "true"
-    "schtack.cloud/cluster"     = var.name
-    "schtack.cloud/cluster-id"  = resource.exoscale_sks_cluster.this.id
-    "schtack.cloud/nodepool-id" = resource.exoscale_sks_nodepool.this[local.public_lb_instance_pool_name].id
+    "schtack.cloud" = "true"
+    "cluster"       = var.name
+    "cluster-id"    = resource.exoscale_sks_cluster.this.id
+    "nodepool-id"   = resource.exoscale_sks_nodepool.this[local.public_lb_instance_pool_name].id
   }
 }
 
@@ -17,7 +17,7 @@ resource "exoscale_security_group" "public_lb" {
   count = var.enable_public_lb ? 1 : 0
 
   name        = format("%s-public-lb-sg", var.name)
-  description = "Public security group for the node pool `${local.public_lb_instance_pool_name}` of the `${var.name}` SKS cluster."
+  description = "Security group for the public NLB of the `${var.name}` SKS cluster."
 }
 
 resource "exoscale_security_group_rule" "public_nodeport_tcp_services" {
@@ -50,12 +50,12 @@ resource "exoscale_nlb" "private_lb" {
   zone = var.zone
   name = format("%s-lb-private", var.name)
 
-  description = "Private Load Balancer for the s`${var.name}` SKS cluster."
+  description = "Private Load Balancer for the `${var.name}` SKS cluster."
   labels = {
-    "schtack.cloud"             = "true"
-    "schtack.cloud/cluster"     = var.name
-    "schtack.cloud/cluster-id"  = resource.exoscale_sks_cluster.this.id
-    "schtack.cloud/nodepool-id" = resource.exoscale_sks_nodepool.this[local.private_lb_instance_pool_name].id
+    "schtack.cloud" = "true"
+    "cluster"       = var.name
+    "cluster-id"    = resource.exoscale_sks_cluster.this.id
+    "nodepool-id"   = resource.exoscale_sks_nodepool.this[local.private_lb_instance_pool_name].id
   }
 }
 
