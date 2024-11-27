@@ -23,10 +23,39 @@ output "kubernetes_client_certificate" {
   sensitive   = true
 }
 
+output "private_lb" {
+  description = <<-EOT
+    Informations about the private load balancer and the node pool that is used as its backend.
+    - `id`: The ID of the private load balancer.
+    - `ip_address`: The IP address of the private load balancer.
+    - `nodepool_id`: The ID of the node pool that is used as the backend for the private load balancer.
+  EOT
+  value = var.enable_private_lb ? {
+    id                        = resource.exoscale_nlb.private_lb[0].id
+    ip_address                = resource.exoscale_nlb.private_lb[0].ip_address
+    nodepool_id               = resource.exoscale_sks_nodepool.this[local.private_lb_instance_pool_name].id
+    nodepool_instance_pool_id = resource.exoscale_sks_nodepool.this[local.private_lb_instance_pool_name].instance_pool_id
+  } : null
+}
+
+output "public_lb" {
+  description = <<-EOT
+    Informations about the public load balancer and the node pool that is used as its backend.
+    - `id`: The ID of the public load balancer.
+    - `ip_address`: The IP address of the public load balancer.
+    - `nodepool_id`: The ID of the node pool that is used as the backend for the public load balancer.
+  EOT
+  value = var.enable_public_lb ? {
+    id                        = resource.exoscale_nlb.public_lb[0].id
+    ip_address                = resource.exoscale_nlb.public_lb[0].ip_address
+    nodepool_id               = resource.exoscale_sks_nodepool.this[local.public_lb_instance_pool_name].id
+    nodepool_instance_pool_id = resource.exoscale_sks_nodepool.this[local.public_lb_instance_pool_name].instance_pool_id
+
+  } : null
+}
+
 output "raw_kubeconfig" {
   description = "Raw `.kube/config` file for `kubectl` access."
   value       = resource.exoscale_sks_kubeconfig.this.kubeconfig
   sensitive   = true
 }
-
-# TODO Add outputs with the IP addresses of the load balancers, their IDs and their respective node pools.
