@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/compare/v0.1.1...v0.1.2) (2025-01-09)
+
+
+### Styles
+
+* move the descriptions up in the variables ([7d57082](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/7d570829e6120c2917f9cc91f9ffb6eb493a13af))
+
+
+### Continuous Integration
+
+* add config to enable Renovate ([3172d34](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/commit/3172d34b6c3a16af5a7387ce9e363ca6884cacf4))
+
 ## [0.1.1](https://github.com/schrodingers-stack/terraform-exoscale-sks-cluster/compare/v0.1.0...v0.1.1) (2024-11-27)
 
 
