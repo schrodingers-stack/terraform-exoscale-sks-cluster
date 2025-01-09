@@ -1,17 +1,17 @@
 # NOTE: the variables in this file are organized in alphabetical order.
 
 variable "auto_upgrade" {
+  description = "Enable automatic upgrade of the SKS cluster control plane."
   type        = bool
   default     = false
   nullable    = false
-  description = "Enable automatic upgrade of the SKS cluster control plane."
 }
 
 variable "cni" {
+  description = "Specify which CNI plugin to use (cannot be changed after the first deployment). Accepted values are `calico` or `cilium`. This module creates the required security group rules."
   type        = string
   default     = "cilium"
   nullable    = false
-  description = "Specify which CNI plugin to use (cannot be changed after the first deployment). Accepted values are `calico` or `cilium`. This module creates the required security group rules."
 
   validation {
     condition     = contains(["calico", "cilium"], var.cni)
@@ -20,6 +20,7 @@ variable "cni" {
 }
 
 variable "csi" {
+  description = "Enable the Exoscale CSI driver and eventually set its `StorageClass` as the default one to be used by `PersistentVolumeClaims`."
   type = object({
     enabled = bool
     default = bool
@@ -28,8 +29,7 @@ variable "csi" {
     enabled = true
     default = true
   }
-  nullable    = false
-  description = "Enable the Exoscale CSI driver and eventually set its `StorageClass` as the default one to be used by `PersistentVolumeClaims`."
+  nullable = false
 
   validation {
     condition     = var.csi.default == true ? var.csi.enabled == true : true
@@ -38,29 +38,29 @@ variable "csi" {
 }
 
 variable "description" {
+  description = "A free-form string description to apply to the SKS cluster."
   type        = string
   default     = null
-  description = "A free-form string description to apply to the SKS cluster."
 }
 
 variable "enable_private_lb" {
-  type        = bool
-  default     = false
   description = <<-EOT
     Enable the creation of a private load balancer for the SKS cluster. This will expose the services of the cluster to the IPs defined in the `var.private_lb_ip_whitelist`.
 
     WARNING: Cannot be disabled after the first deployment without some manual steps. To disable it, you need to first detach the node pool from the security group rules of the private load balancer and then you can `terraform apply`.
   EOT
+  type        = bool
+  default     = false
 }
 
 variable "enable_public_lb" {
-  type        = bool
-  default     = true
   description = <<-EOT
     Enable the creation of a public load balancer for the SKS cluster. This will expose the services of the cluster to the internet.
 
     WARNING: Cannot be disabled after the first deployment without some manual steps. To disable it, you need to first detach the node pool from the security group rules of the public load balancer and then you can `terraform apply`.
   EOT
+  type        = bool
+  default     = true
 }
 
 variable "kubeconfig_file_create" {
@@ -82,12 +82,13 @@ variable "kubeconfig_early_renewal" {
 }
 
 variable "kubernetes_version" {
+  description = "The Kubernetes version to use for the SKS cluster. You can use the https://community.exoscale.com/documentation/tools/exoscale-command-line-interface/[Exoscale CLI] and run `exo compute sks versions` to see the available versions. May only be set at creation time."
   type        = string
   nullable    = false
-  description = "The Kubernetes version to use for the SKS cluster. You can use the https://community.exoscale.com/documentation/tools/exoscale-command-line-interface/[Exoscale CLI] and run `exo compute sks versions` to see the available versions. May only be set at creation time."
 }
 
 variable "oidc" {
+  description = "OpenID Connect configuration to allow access to the SKS cluster. Can only be set at creation time."
   type = object({
     client_id       = string
     issuer_url      = string
@@ -97,17 +98,22 @@ variable "oidc" {
     username_claim  = optional(string)
     username_prefix = optional(string)
   })
-  default     = null
-  description = "OpenID Connect configuration to allow access to the SKS cluster. Can only be set at creation time."
+  default = null
 }
 
 variable "name" {
+  description = "The name of the SKS cluster."
   type        = string
   nullable    = false
-  description = "The name of the SKS cluster."
 }
 
 variable "nodepools" {
+  description = <<-EOT
+    Map containing the SKS node pools to be created.
+
+    Needs to be a map of maps, where the key is the name of the node pool and the value is a map containing at least the keys `instance_type` and `size`.
+    The other keys are optional: `description`, `instance_prefix`, `disk_size`, `labels`, `taints`, `private_network_ids` and `security_group_ids`. Check the official documentation https://registry.terraform.io/providers/exoscale/exoscale/latest/docs/resources/sks_nodepool[here] for more information.
+  EOT
   type = map(object({
     size                = number
     instance_type       = string
@@ -118,22 +124,16 @@ variable "nodepools" {
     private_network_ids = optional(list(string), [])
     security_group_ids  = optional(list(string), [])
   }))
-  nullable    = false
-  description = <<-EOT
-    Map containing the SKS node pools to be created.
-
-    Needs to be a map of maps, where the key is the name of the node pool and the value is a map containing at least the keys `instance_type` and `size`.
-    The other keys are optional: `description`, `instance_prefix`, `disk_size`, `labels`, `taints`, `private_network_ids` and `security_group_ids`. Check the official documentation https://registry.terraform.io/providers/exoscale/exoscale/latest/docs/resources/sks_nodepool[here] for more information.
-  EOT
+  nullable = false
 }
 variable "private_lb_nodepool" {
-  type        = string
-  default     = null
   description = <<-EOT
     The name of the node pool to use as the backend for the public load balancer.
     
     This is the node pool where your public ingress controller should reside. A new security group with specific rules will be created for this node pool.
   EOT
+  type        = string
+  default     = null
 
   validation {
     condition     = var.enable_private_lb ? var.private_lb_nodepool != null : true
@@ -147,10 +147,10 @@ variable "private_lb_nodepool" {
 }
 
 variable "private_lb_ip_whitelist" {
+  description = "List of IP addresses or CIDR blocks that are allowed to access the private load balancer. If empty, the private load balancer will not be accessible from the internet."
   type        = list(string)
   nullable    = false
   default     = []
-  description = "List of IP addresses or CIDR blocks that are allowed to access the private load balancer. If empty, the private load balancer will not be accessible from the internet."
 
   validation {
     condition     = var.enable_private_lb ? length(var.private_lb_ip_whitelist) > 0 : true
@@ -159,8 +159,6 @@ variable "private_lb_ip_whitelist" {
 }
 
 variable "public_lb_nodepool" {
-  type        = string
-  default     = null
   description = <<-EOT
     The name of the node pool to use as the backend for the public load balancer.
     
@@ -168,6 +166,8 @@ variable "public_lb_nodepool" {
     
     If not set, the first node pool in `var.nodepools` will be used.
   EOT
+  type        = string
+  default     = null
 
   validation {
     condition     = var.enable_public_lb && var.public_lb_nodepool != null ? contains(keys(var.nodepools), var.public_lb_nodepool) : true
@@ -187,9 +187,9 @@ variable "public_lb_nodepool" {
 }
 
 variable "service_level" {
+  description = "Choose the service level for the SKS cluster. _Starter_ can be used for test and development purposes, _Pro_ is recommended for production workloads. The official documentation is available https://community.exoscale.com/documentation/sks/overview/#pricing-tiers[here]."
   type        = string
   default     = "pro"
-  description = "Choose the service level for the SKS cluster. _Starter_ can be used for test and development purposes, _Pro_ is recommended for production workloads. The official documentation is available https://community.exoscale.com/documentation/sks/overview/#pricing-tiers[here]."
 
   validation {
     condition     = contains(["starter", "pro"], var.service_level)
@@ -198,7 +198,7 @@ variable "service_level" {
 }
 
 variable "zone" {
+  description = "The name of the zone where to deploy the SKS cluster. Available zones can be consulted https://community.exoscale.com/documentation/sks/overview/#availability[here]."
   type        = string
   nullable    = false
-  description = "The name of the zone where to deploy the SKS cluster. Available zones can be consulted https://community.exoscale.com/documentation/sks/overview/#availability[here]."
 }
